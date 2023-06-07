@@ -17,3 +17,20 @@ def test_apply_discount():
     item1.apply_discount()
     assert item1.price == 8_000
 
+
+def test_string_to_number():
+    assert item.Item.string_to_number('5') == 5
+
+
+def test_name():
+    # изменение наименования товара
+    item1.name = 'Nokia'
+    assert item1.name == 'Nokia'
+
+    # длина наименования товара больше 10 символов
+    item1.name = 'СуперСмартфон'
+    assert item1.name == 'Nokia'
+
+    item.Item.instantiate_from_csv('src/items.csv')  # создание объектов из данных файла
+    assert len(item.Item.all) == 6  # в файле 6 записей с данными по товарам
+
