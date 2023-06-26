@@ -34,3 +34,13 @@ def test_name():
     item.Item.instantiate_from_csv('src/items.csv')  # создание объектов из данных файла
     assert len(item.Item.all) == 6  # в файле 6 записей с данными по товарам
 
+
+def test_repr():
+    """Тестирование функции '__repr__'"""
+    item2 = item.Item("Смартфон", 10000, 20)
+    assert repr(item2) == "Item('Смартфон', 10000, 20)"
+
+
+def test_str():
+    item2 = item.Item("Смартфон", 10000, 20)
+    assert str(item2) == 'Смартфон'
