@@ -32,7 +32,7 @@ def test_name():
     assert item1.name == 'Nokia'
 
     item.Item.instantiate_from_csv('src/items.csv')  # создание объектов из данных файла
-    assert len(item.Item.all) == 6  # в файле 6 записей с данными по товарам
+    assert len(item.Item.all) == 5  # в файле 5 записей с данными по товарам
 
 
 def test_repr():
@@ -44,3 +44,12 @@ def test_repr():
 def test_str():
     item2 = item.Item("Смартфон", 10000, 20)
     assert str(item2) == 'Смартфон'
+
+
+def test_add():
+    item2 = item.Item("Смартфон", 10000, 20)
+
+    assert item1 + item2 == 40
+    assert item1 + 0 == None
+
+
