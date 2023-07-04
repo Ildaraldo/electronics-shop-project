@@ -22,10 +22,16 @@ class Item:
         self.all.append(self)
 
     def __repr__(self):
-        return f"{self.__class__.__name__}('{self.__name}', {self.price}, {self.quantity})"
+        return f"{self.__class__.__name__}('{self.name}', {self.price}, {self.quantity})"
 
     def __str__(self):
-        return f"{self.__name}"
+        return f"{self.name}"
+
+    def __add__(self, other):
+        if isinstance(other, self.__class__):
+            return self.quantity + other.quantity
+        else:
+            return None
 
     def calculate_total_price(self) -> float:
         """
@@ -67,6 +73,10 @@ class Item:
         # чтение данных с файла .csv
         with open(filename, 'r', encoding='windows-1251') as csvfile:
             reader = csv.DictReader(csvfile)
+
+            # при загрузке чистим список
+            cls.all = []
+
             # создание экземпляров класса Item
             for ex in reader:
                 cls(ex['name'], ex['price'], ex['quantity'])
