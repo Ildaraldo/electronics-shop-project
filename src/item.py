@@ -1,6 +1,17 @@
 import csv
 
 
+class InstantiateCSVError(Exception):
+    """
+    Класс для обработки исключений при повреждении файлов csv
+    """
+    def __init__(self, *args, **kwargs):
+        self.message = args[0] if args else 'Файл csv повреждён'
+
+    # def __str__(self):
+    #     return self.__message
+
+
 class Item:
     """
     Класс для представления товара в магазине.
@@ -72,16 +83,31 @@ class Item:
         """
         Класс-метод, инициализирующий экземпляры класса Item данными из файла src/items.csv
         """
-        # чтение данных с файла .csv
-        with open(filename, 'r', encoding='windows-1251') as csvfile:
-            reader = csv.DictReader(csvfile)
+        try:
+            # чтение данных с файла .csv
+            with open(filename, 'r', encoding='windows-1251') as csvfile:
+                reader = csv.DictReader(csvfile)
 
-            # при загрузке чистим список
-            cls.all = []
+                # при загрузке чистим список
+                cls.all = []
 
-            # создание экземпляров класса Item
-            for ex in reader:
-                cls(ex['name'], ex['price'], ex['quantity'])
+                # создание экземпляров класса Item
+                try:
+                    for i, ex in enumerate(reader, start=1):
+                        if not ex['name']:
+                            raise InstantiateCSVError(f'В строке {i} отсутствует данные "name"')
+                        elif not ex['price']:
+                            raise InstantiateCSVError(f'В строке {i} отсутствует данные "price"')
+                        elif not ex['quantity']:
+                            raise InstantiateCSVError(f'В строке {i} отсутствует данные "quantity"')
+                        else:
+                            cls(ex['name'], ex['price'], ex['quantity'])
+
+                except InstantiateCSVError as ex:
+                    print(f'Файл {filename} поврежден\n{ex.__str__()}')
+
+        except FileNotFoundError:
+            print(f'Отсутствует файл {filename}')
 
     @staticmethod
     def string_to_number(string: str):
